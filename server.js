@@ -17,6 +17,16 @@ app.post("/flashcards", async (req, res) => {
         return res.status(500);
     }
 });
+app.get("/flashcards", async (req, res) => {
+    try {
+        const flashcards = await Flashcard.findAll();
+        return res.json(flashcards);
+    } catch (err) {
+        console.log(err);
+        return res.status(500);
+    }
+});
+
  
 app.listen(port, async () => {
     console.log(`Listening on http://localhost:${port}`);
