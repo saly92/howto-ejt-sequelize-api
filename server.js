@@ -40,7 +40,41 @@ app.get("/flashcards/:id", async (req, res) => {
     }
 });
 
+app.put("/flashcards/:id", async (req, res) => {
+    const id = req.params.id;
+    const { category, front, back } = req.body;
+    try {
+        const flashcard = await Flashcard.findOne({
+            where: { id },
+        });
 
+        flashcard.category = category;
+        flashcard.front = front;
+        flashcard.back = back;
+
+        await flashcard.save();
+
+        return res.json(flashcard);
+    } catch (err) {
+        console.log(err);
+        return res.status(500);
+    }
+});
+app.delete("/flashcards/:id", async (req, res) => {
+    const id = req.params.id;
+    try {
+        const flashcard = await Flashcard.findOne({
+            where: { id },
+        });
+
+        await flashcard.destroy();
+
+        return res.json({ message: `Flashcard with id ${id} deleted.` });
+    } catch (err) {
+        console.log(err);
+        return res.status(500);
+    }
+});
  
 app.listen(port, async () => {
     console.log(`Listening on http://localhost:${port}`);
